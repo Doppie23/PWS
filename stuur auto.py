@@ -2,7 +2,7 @@ from gpiozero import AngularServo
 from time import sleep
 
 #max en min pulse width zijn gegokt door te testen
-servo = AngularServo(18, min_pulse_width=0.0004, max_pulse_width=0.0023)
+servo = AngularServo(18, min_pulse_width=0.0008, max_pulse_width=0.0020)
 
 while True:
     #angle is 30 want dat is vgm de max angle
