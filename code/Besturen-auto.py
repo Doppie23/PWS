@@ -1,7 +1,6 @@
 from gpiozero import AngularServo
-from time import sleep
 
-servo = AngularServo(18)
+servo = AngularServo(18, min_angle=-22, max_angle=32)
 
 def Stuurhoek(hoek):
     #code voor hoek
