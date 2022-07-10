@@ -1,6 +1,7 @@
 from gpiozero import AngularServo
 
-servo = AngularServo(18, min_angle=-22, max_angle=32)
+#hoek is nog niet goed of wel geen idee
+servo = AngularServo(18, min_angle=-15, max_angle=20)
 
 def Stuurhoek(hoek):
     #code voor hoek
