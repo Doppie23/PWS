@@ -1,9 +1,15 @@
 from gpiozero import AngularServo
+from gpiozero.pins.pigpio import PiGPIOFactory
 
-#hoek is nog niet goed of wel geen idee
-servo = AngularServo(18, min_angle=-35, max_angle=35, min_pulse_width=0.001, max_pulse_width=0.0018)
+factory = PiGPIOFactory()
+
+#hoek is nu wel redelijk (letop min angle mag niet meer dan ong -20)
+servo = AngularServo(18, min_angle=-40, max_angle=27, min_pulse_width=0.0010, max_pulse_width=0.0018, pin_factory=factory)
+
 
 def Stuurhoek(hoek):
     #code voor hoek
     servo.angle = hoek
     print(hoek)
+    
+#Stuurhoek(-15)
