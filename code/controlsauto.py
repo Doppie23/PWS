@@ -1,5 +1,6 @@
 from gpiozero import AngularServo
 from gpiozero.pins.pigpio import PiGPIOFactory
+import RPi.GPIO as IO
 
 factory = PiGPIOFactory()
 
