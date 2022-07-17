@@ -17,7 +17,7 @@ def Stuurhoek(hoek):
 #moet eerst wel setup runnen, staat hieronder
 def Motor(gas):
     t.ChangeDutyCycle(gas)
-    print(throttle)
+    print(gas)
     
 def setup():
     sleep(1)
