@@ -12,7 +12,7 @@ def Stuurhoek(hoek):
     servo.angle = hoek
     print(hoek)
     
-Stuurhoek(-15)
+#Stuurhoek(-15)
     
 #moet eerst wel setup runnen, staat hieronder
 def Motor(gas):
