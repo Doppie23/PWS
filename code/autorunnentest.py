@@ -10,11 +10,14 @@ t=IO.PWM(18,100)
 throttle = 14
 t.start(throttle)
 input("wacht op geluid en druk dan op enter")
-    
-#nu vooruit
-gas=14.6
+
+#wielen in het midden
+ca.Stuurhoek(0)
+
+#nu vooruit met min snelheid
+gas=14.9
 t.ChangeDutyCycle(gas)
 print(gas)
 
-input("cleanup")
+input("enter voor eindigen")
 ca.cleanup()
