@@ -14,6 +14,7 @@ def Stuurhoek(hoek):
     servo.angle = hoek
     print(hoek)
     
+
 Stuurhoek(0)
     
     
