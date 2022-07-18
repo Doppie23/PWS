@@ -1,5 +1,7 @@
 from gpiozero import AngularServo
 from gpiozero.pins.pigpio import PiGPIOFactory
+from time import sleep
+import RPi.GPIO as IO
 
 factory = PiGPIOFactory()
 
@@ -12,21 +14,8 @@ def Stuurhoek(hoek):
     servo.angle = hoek
     print(hoek)
     
-Stuurhoek(-15)
+Stuurhoek(0)
     
-#moet eerst wel setup runnen, staat hieronder
-def Motor(gas):
-    t.ChangeDutyCycle(gas)
-    print(throttle)
-    
-def setup():
-    sleep(1)
-    IO.setmode(IO.BCM)
-    IO.setup(18, IO.OUT)
-    t=IO.PWM(18,100)
-    throttle = 14
-    t.start(throttle)
-    input("wacht op geluid en druk dan op enter")
     
 def cleanup():
     IO.setmode(IO.BCM)
