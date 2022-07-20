@@ -16,5 +16,5 @@ while True:
     if cv.waitkey(5) == ord('x'):
         break
 
-    camera.release()
-    cv.destroyAllwindows()
+camera.release()
+cv.destroyAllwindows()
