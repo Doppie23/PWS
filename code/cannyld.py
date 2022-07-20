@@ -9,12 +9,12 @@ while True:
 
     cv.imshow('Camera', frame)
 
-    edges = cv.Canny(frame, 120, 120)
+    edges = cv.Canny(frame, 140, 140)
     cv.imshow('Canny', edges)
 
 
-    if cv.waitkey(5) == ord('x'):
+    if cv.waitKey(5) == ord('x'):
         break
 
-    camera.release()
-    cv.destroyAllwindows()
+camera.release()
+cv.destroyAllwindows()
