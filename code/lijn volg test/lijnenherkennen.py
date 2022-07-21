@@ -9,7 +9,7 @@ while True:
     if not _:
         video = cv2.VideoCapture(0)
         continue
-    #eerste blurren want keol
+    #eerste blurren want minder last van noise
     frame = cv2.GaussianBlur(orig_frame, (5, 5), 0)
     #canny edge detect
     edges = cv2.Canny(frame, 75, 150)
