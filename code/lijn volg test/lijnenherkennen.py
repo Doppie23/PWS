@@ -14,7 +14,7 @@ while True:
     #canny edge detect
     edges = cv2.Canny(frame, 75, 150)
     #dan de lijnen tekenen
-    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 80, minLineLength=8, maxLineGap=10) #een na laatste getal is sensitiviteit
+    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 80, minLineLength=8, maxLineGap=10) #derde getal is sens
     if lines is not None:
         for line in lines:
             x1, y1, x2, y2 = line[0]
