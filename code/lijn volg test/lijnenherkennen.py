@@ -1,16 +1,16 @@
 import cv2
 import numpy as np
 
-video = cv2.VideoCapture(0)
+video = cv2.VideoCapture(1)
 
 while True:
     _, orig_frame = video.read()
     #weet niet wat dit doet maar zal vast geod zijn
     if not _:
-        video = cv2.VideoCapture(0)
+        video = cv2.VideoCapture(1)
         continue
     #eerste blurren want minder last van noise
-    frame = cv2.GaussianBlur(orig_frame, (5, 5), 0)
+    frame = cv2.GaussianBlur(orig_frame, (5, 5), 10)
     #canny edge detect
     edges = cv2.Canny(frame, 75, 150)
     #dan de lijnen tekenen
