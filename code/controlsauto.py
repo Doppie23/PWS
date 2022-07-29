@@ -2,6 +2,7 @@ from gpiozero import AngularServo
 from gpiozero.pins.pigpio import PiGPIOFactory
 from time import sleep
 import RPi.GPIO as IO
+import cv2
 
 factory = PiGPIOFactory()
 
@@ -20,3 +21,4 @@ def cleanup():
     IO.setup(18, IO.OUT)
     IO.setup(17, IO.OUT)
     IO.cleanup()
+    cv2.destroyAllWindows()
