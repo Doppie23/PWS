@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import math
 
 def hsvkleur(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -7,7 +8,7 @@ def hsvkleur(img):
     return hsv
 
 def paarsalleen(hsvimg):
-    lower_blue = np.array([100, 5, 81])
+    lower_blue = np.array([100, 5, 81]) #hsv codes maar dan gehalveerd
     upper_blue = np.array([180, 255, 255])
     mask = cv2.inRange(hsvimg, lower_blue, upper_blue)
     return mask
@@ -39,7 +40,6 @@ def average(frame, line_segments):
     """
     lane_lines = []
     if line_segments is None:
-        # logging.info('No line_segment segments detected')
         return lane_lines
 
     height, width, _ = frame.shape
@@ -53,7 +53,6 @@ def average(frame, line_segments):
     for line_segment in line_segments:
         for x1, y1, x2, y2 in line_segment:
             if x1 == x2:
-                # logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
                 continue
             fit = np.polyfit((x1, x2), (y1, y2), 1)
             slope = fit[0]
@@ -72,23 +71,20 @@ def average(frame, line_segments):
     right_fit_average = np.average(right_fit, axis=0)
     if len(right_fit) > 0:
         lane_lines.append(make_points(frame, right_fit_average))
-
-    # logging.debug('lane lines: %s' % lane_lines)  # [[[316, 720, 484, 432]], [[1009, 720, 718, 432]]]
-
     return lane_lines
 
 def make_points(frame, line): 
     height, width, _ = frame.shape
     slope, intercept = line
-    y1 = height  # bottom of the frame
-    y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
+    y1 = height
+    y2 = int(y1 * 1 / 2)
 
     # bound the coordinates within the frame
     x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
     x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
     return [[x1, y1, x2, y2]]
 
-def display_lines(frame, lines, line_color=(0, 255, 0), line_width=2):
+def display_lines(frame, lines, line_color=(0, 255, 0), line_width=10):
     line_image = np.zeros_like(frame)
     if lines is not None:
         for line in lines:
@@ -109,7 +105,7 @@ while True:
     crop = cropimg(canny)
     lijnen = lijnendetect(crop)
     averaged_lines = average(frame, lijnen)
-    lane_lines_image = display_lines(frame, averaged_lines)
+    lane_lines_image = display_lines(frame, averaged_lines) 
     
 
     # alle imshow dingen:
@@ -119,11 +115,12 @@ while True:
         for line in lijnen:
             x1, y1, x2, y2 = line[0]
             cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
-    cv2.imshow("hsv", hsvimg)
     cv2.imshow("hough", frame)
-    cv2.imshow("mask", mask)
-    cv2.imshow("crop", crop)
-    cv2.imshow("canny", canny)
+    
+    # cv2.imshow("hsv", hsvimg)
+    # cv2.imshow("mask", mask)
+    # cv2.imshow("crop", crop)
+    # cv2.imshow("canny", canny)
     cv2.imshow("lane lines", lane_lines_image)
 
 
