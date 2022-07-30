@@ -140,7 +140,7 @@ def lijn_volgen():
     averaged_lines = average(frame, lijnen)
     lane_lines_image = display_lines(frame, averaged_lines)
     hoek = stuurhoek(frame, averaged_lines)
-    print(hoek)
+    # print(hoek)
     pijlhoek = stuurhoek_laten_zien(lane_lines_image, hoek)
     
 
@@ -158,7 +158,7 @@ def lijn_volgen():
     # cv2.imshow("crop", crop)
     # cv2.imshow("canny", canny)
     cv2.imshow("lane lines", lane_lines_image)
-
+    return hoek
 
 
     #esc om te stoppen
