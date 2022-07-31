@@ -6,8 +6,8 @@ hoek = lijn_volger(0) #is om beginhoek op 0 te zetten moet dus wel eerst nog ged
 
 
 while True:
-    hoek.stabhoek()
-
+    stuurhoek = hoek.stabhoek()
+    print(stuurhoek)
     key = cv2.waitKey(1)
     if key == 27:
         break
