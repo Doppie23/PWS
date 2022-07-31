@@ -1,12 +1,12 @@
-from lijnherkennen import lijn_volgen
+from lijnherkennen import lijn_volger
 import cv2
 
 
+hoek = lijn_volger(0) #is om beginhoek op 0 te zetten moet dus wel eerst nog gedaan worden
+
 
 while True:
-    hoek = lijn_volgen() # eerste eerder ergens de hoek op nul zetten voor de loop zodat curr stuurhoek goed begint
-    print(hoek)
-
+    hoek.stabhoek()
 
     key = cv2.waitKey(1)
     if key == 27:

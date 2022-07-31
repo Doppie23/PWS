@@ -164,8 +164,6 @@ def lijn_volgen():
     hoek = stuurhoek(frame, averaged_lines)
     # print(hoek)
     pijlhoek = stuurhoek_laten_zien(lane_lines_image, hoek)
-
-    curr_stuurhoek = stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek=hoek, num_lijnen=averaged_lines)
     
 
     # alle imshow dingen:
@@ -182,7 +180,7 @@ def lijn_volgen():
     # cv2.imshow("crop", crop)
     # cv2.imshow("canny", canny)
     cv2.imshow("lane lines", lane_lines_image)
-    return curr_stuurhoek
+    return hoek, averaged_lines, lane_lines_image
 
 
     #esc om te stoppen
@@ -191,3 +189,13 @@ def lijn_volgen():
 #         break
 # video.release()
 # cv2.destroyAllWindows()
+
+class lijn_volger:
+    def __init__(self, beginhoek = 0):
+        self.curr_hoek = beginhoek
+
+    def stabhoek(self):
+        hoek, averaged_lines, lane_lines_image = lijn_volgen()
+        self.curr_hoek = stabilize_stuurhoek(self.curr_hoek, hoek, num_lijnen=averaged_lines)
+        print(self.curr_hoek)
+        cv2.imshow("lane lines", lane_lines_image)
