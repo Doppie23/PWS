@@ -1,8 +1,10 @@
 from lijnherkennen import lijn_volgen
 import cv2
 
+
+
 while True:
-    hoek = lijn_volgen()
+    hoek = lijn_volgen() # eerste eerder ergens de hoek op nul zetten voor de loop zodat curr stuurhoek goed begint
     print(hoek)
 
 

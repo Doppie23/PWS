@@ -127,6 +127,28 @@ def stuurhoek_laten_zien(frame, stuurhoek, line_color=(0,0,255), line_width=10):
     richting = cv2.addWeighted(frame, 0.8, richting, 1, 1)
     return richting
 
+def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_verandering_twee_lijnen=5, max_hoek_verandering_een_lijn=1):
+    curr_stuurhoek += 90
+    new_stuurhoek += 90
+    
+    if num_lijnen == 2 :
+        max_hoek_verandering = max_hoek_verandering_twee_lijnen
+    else :
+        max_hoek_verandering = max_hoek_verandering_een_lijn
+    
+    hoek_verandering = new_stuurhoek - curr_stuurhoek
+    if abs(hoek_verandering) > max_hoek_verandering:
+        stabilized_stuurhoek = int(curr_stuurhoek
+                                        + max_hoek_verandering * hoek_verandering / abs(hoek_verandering))
+    else:
+        stabilized_stuurhoek = new_stuurhoek
+
+    stabilized_stuurhoek -= 90
+
+    return stabilized_stuurhoek
+
+
+
 camera = 1
 
 video = cv2.VideoCapture(camera)
@@ -142,6 +164,8 @@ def lijn_volgen():
     hoek = stuurhoek(frame, averaged_lines)
     # print(hoek)
     pijlhoek = stuurhoek_laten_zien(lane_lines_image, hoek)
+
+    curr_stuurhoek = stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek=hoek, num_lijnen=averaged_lines)
     
 
     # alle imshow dingen:
@@ -158,7 +182,7 @@ def lijn_volgen():
     # cv2.imshow("crop", crop)
     # cv2.imshow("canny", canny)
     cv2.imshow("lane lines", lane_lines_image)
-    return hoek
+    return curr_stuurhoek
 
 
     #esc om te stoppen
