@@ -12,7 +12,6 @@ servo = AngularServo(17, min_angle=-40, max_angle=27, min_pulse_width=0.0010, ma
 def Stuurhoek(hoek):
     #code voor hoek
     servo.angle = hoek
-    print(hoek)
 
 #Stuurhoek(0)
 
