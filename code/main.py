@@ -29,12 +29,14 @@ while True:
     #zodat de servo niet te ver gaat en als de hoek wel zo groot is gaat de motor langzamer
     if stuurhoek < -20:
         stuurhoek = -20
-        gas = 14.7
-        t.ChangeDutyCycle(gas)
+        if gas != 14.7:
+            gas = 14.7
+            t.ChangeDutyCycle(gas)
     elif stuurhoek > 27:
         stuurhoek = 27
-        gas = 14.7
-        t.ChangeDutyCycle(gas)
+        if gas != 14.7:
+            gas = 14.7
+            t.ChangeDutyCycle(gas)
     elif gas == 14.7 and stuurhoek < 27 and stuurhoek > -20:    # om gas weer terug te zetten als de hoek weer in servo range zit
         gas = 14.9
         t.ChangeDutyCycle(gas)
