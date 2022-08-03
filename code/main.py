@@ -43,7 +43,7 @@ while True:
     print("hoek:", stuurhoek, "gas:", gas)
 
     """
-    cleanup
+    cleanup (esc om te stoppen)
     """
     key = cv2.waitKey(1)
     if key == 27:
