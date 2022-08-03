@@ -5,6 +5,7 @@ from time import sleep
 import RPi.GPIO as IO
 
 # initialiseren van auto
+print("auto aan het initialiseren")
 sleep(1)
 IO.setmode(IO.BCM)
 IO.setup(18, IO.OUT)
@@ -16,7 +17,8 @@ input("wacht op geluid van esc druk dan op enter")
 ca.Stuurhoek(0)
 hoek = lijn_volger(0) #0 is de begin hoek van de servo
 input("klaar om te gaan druk op enter")
-t.ChangeDutyCycle(14.9)
+gas = 14.9
+t.ChangeDutyCycle(gas)
 
 while True:
     """
@@ -38,7 +40,7 @@ while True:
         t.ChangeDutyCycle(gas)
     
     ca.Stuurhoek(stuurhoek)
-    print("servo/gas", stuurhoek, gas)
+    print("hoek:", stuurhoek, "gas:", gas)
 
     """
     cleanup
