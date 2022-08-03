@@ -11,10 +11,12 @@ while True:
 
     if stuurhoek < -20:
         stuurhoek = -20
-        gas = 14.7
+        if gas != 14.7:
+            gas = 14.7
     elif stuurhoek > 27:
         stuurhoek = 27
-        gas = 14.7
+        if gas != 14.7:
+            gas = 14.7
     elif gas == 14.7 and stuurhoek < 27 and stuurhoek > -20:    # om gas weer terug te zetten als de hoek weer in servo range zit
         gas = 14.9
 
