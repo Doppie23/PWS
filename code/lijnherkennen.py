@@ -17,10 +17,13 @@ def cannyedge(mask):
     edges = cv2.Canny(mask, 200, 400)
     return edges
 
-def cropimg(edges):
-    # print(frame.shape)
-    crop = edges[240:480, 0:640] #gebruik print hierboven voor getallen
-    cropgoed = cv2.copyMakeBorder(crop, top=240, bottom = 0, left = 0, right = 0, borderType=cv2.BORDER_CONSTANT) # om hem op goede plek te zetten, pas de top aan
+def cropimg(edges, frame):
+    height, width, _ = frame.shape
+    y = height
+    y5 = int(height/2)
+    x = width
+    crop = edges[y5:y, 0:x] 
+    cropgoed = cv2.copyMakeBorder(crop, top=y5, bottom = 0, left = 0, right = 0, borderType=cv2.BORDER_CONSTANT) # om hem op goede plek te zetten
     return cropgoed
 
 def lijnendetect(canny):
@@ -34,9 +37,9 @@ def lijnendetect(canny):
 
 def average(frame, line_segments):
     """
-    This function combines line segments into one or two lane lines
-    If all line slopes are < 0: then we only have detected left lane
-    If all line slopes are > 0: then we only have detected right lane
+    dit maakt van de meerdere lijnen maar twee lijnen
+    als alle hoeken < 0 dan alleen links
+    als alle hoeken > 0 dan alleen rechts
     """
     lane_lines = []
     if line_segments is None:
@@ -47,8 +50,8 @@ def average(frame, line_segments):
     right_fit = []
 
     boundary = 1/3
-    left_region_boundary = width * (1 - boundary)  # left lane line segment should be on left 2/3 of the screen
-    right_region_boundary = width * boundary # right lane line segment should be on left 2/3 of the screen
+    left_region_boundary = width * (1 - boundary)  # linker lijnen alleen op 2/3 linker helft scherm
+    right_region_boundary = width * boundary # zelfde alleen dan voor rechts
 
     for line_segment in line_segments:
         for x1, y1, x2, y2 in line_segment:
@@ -79,7 +82,6 @@ def make_points(frame, line):
     y1 = height
     y2 = int(y1 * 1 / 2)
 
-    # bound the coordinates within the frame
     x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
     x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
     return [[x1, y1, x2, y2]]
@@ -157,7 +159,7 @@ def lijn_volgen():
     hsvimg = hsvkleur(frame)
     mask = paarsalleen(hsvimg)
     canny = cannyedge(mask)
-    crop = cropimg(canny)
+    crop = cropimg(canny, frame)
     lijnen = lijnendetect(crop)
     averaged_lines = average(frame, lijnen)
     lane_lines_image = display_lines(frame, averaged_lines)
