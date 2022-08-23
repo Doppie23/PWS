@@ -4,6 +4,9 @@ import controlsauto as ca
 from time import sleep
 import RPi.GPIO as IO
 
+minstuurhoek = -35
+maxstuurhoek = 29
+
 # initialiseren van auto
 print("auto aan het initialiseren")
 sleep(1)
@@ -27,17 +30,17 @@ while True:
     stuurhoek = hoek.stabhoek()
     
     #zodat de servo niet te ver gaat en als de hoek wel zo groot is gaat de motor langzamer
-    if stuurhoek < -20:
-        stuurhoek = -20
+    if stuurhoek < minstuurhoek:
+        stuurhoek = minstuurhoek
         if gas != 14.7:
             gas = 14.7
             t.ChangeDutyCycle(gas)
-    elif stuurhoek > 27:
-        stuurhoek = 27
+    elif stuurhoek > maxstuurhoek:
+        stuurhoek = maxstuurhoek
         if gas != 14.7:
             gas = 14.7
             t.ChangeDutyCycle(gas)
-    elif gas == 14.7 and stuurhoek < 27 and stuurhoek > -20:    # om gas weer terug te zetten als de hoek weer in servo range zit
+    elif gas == 14.7 and stuurhoek < maxstuurhoek and stuurhoek > minstuurhoek:    # om gas weer terug te zetten als de hoek weer in servo range zit
         gas = 14.9
         t.ChangeDutyCycle(gas)
     
