@@ -8,9 +8,18 @@ def hsvkleur(img):
     return hsv
 
 def paarsalleen(hsvimg):
-    lower_blue = np.array([100, 5, 81]) #hsv codes maar dan gehalveerd
-    upper_blue = np.array([180, 255, 255])
-    mask = cv2.inRange(hsvimg, lower_blue, upper_blue)
+    # lower_blue = np.array([100, 5, 81]) #hsv codes maar dan gehalveerd
+    # upper_blue = np.array([180, 255, 255])
+    # mask = cv2.inRange(hsvimg, lower_blue, upper_blue)
+    min_blue = 0
+    min_green = 0
+    min_red = 0
+    
+    max_blue = 255
+    max_green = 255
+    max_red = 255
+    
+    mask = cv2.inRange(hsvimg, (min_blue, min_green, min_red), (max_blue, max_green, max_red))
     return mask
 
 def cannyedge(mask):
