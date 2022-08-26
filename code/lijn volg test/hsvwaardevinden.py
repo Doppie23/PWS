@@ -18,7 +18,7 @@ cv2.createTrackbar('max_blue', 'Track Bars', 0, 255, doNothing)
 cv2.createTrackbar('max_green', 'Track Bars', 0, 255, doNothing)
 cv2.createTrackbar('max_red', 'Track Bars', 0, 255, doNothing)
 
-video = cv2.VideoCapture(2)
+video = cv2.VideoCapture(0)
 
 #creating a loop to get the feedback of the changes in trackbars
 while True:

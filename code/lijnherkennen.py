@@ -160,7 +160,7 @@ def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_vera
 
 
 
-camera = 1
+camera = 0
 
 video = cv2.VideoCapture(camera)
 def lijn_volgen():
