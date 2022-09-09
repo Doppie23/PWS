@@ -138,7 +138,7 @@ def stuurhoek_laten_zien(frame, stuurhoek, line_color=(0,0,255), line_width=10):
     richting = cv2.addWeighted(frame, 0.8, richting, 1, 1)
     return richting
 
-def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_verandering_twee_lijnen=5, max_hoek_verandering_een_lijn=1):
+def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_verandering_twee_lijnen=10, max_hoek_verandering_een_lijn=7):
     curr_stuurhoek += 90
     new_stuurhoek += 90
     
@@ -162,10 +162,8 @@ def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_vera
 
 camera = 0
 
-video = cv2.VideoCapture(camera, cv2.CAP_DSHOW)
+video = cv2.VideoCapture(camera)
 
-video.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-video.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 def lijn_volgen():
     _, frame = video.read()
     hsvimg = hsvkleur(frame)
@@ -193,7 +191,7 @@ def lijn_volgen():
     # cv2.imshow("mask", mask)
     # cv2.imshow("crop", crop)
     # cv2.imshow("canny", canny)
-    cv2.imshow("lane lines", lane_lines_image)
+    # cv2.imshow("lane lines", lane_lines_image)
     
     return hoek, averaged_lines, lane_lines_image
 
