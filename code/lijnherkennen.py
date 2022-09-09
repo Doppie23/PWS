@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import math
+import sys
 
 def hsvkleur(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -11,13 +12,13 @@ def paarsalleen(hsvimg):
     # lower_blue = np.array([100, 5, 81]) #hsv codes maar dan gehalveerd
     # upper_blue = np.array([180, 255, 255])
     # mask = cv2.inRange(hsvimg, lower_blue, upper_blue)
-    min_blue = 49
-    min_green = 0
-    min_red = 35
+    min_blue = 71
+    min_green = 43
+    min_red = 173
     
-    max_blue = 191
-    max_green = 62
-    max_red = 186
+    max_blue = 255
+    max_green = 76
+    max_red = 248
     
     mask = cv2.inRange(hsvimg, (min_blue, min_green, min_red), (max_blue, max_green, max_red))
     return mask
@@ -160,11 +161,13 @@ def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_vera
 
 
 
-camera = 0
+camera = 1
 
 video = cv2.VideoCapture(camera)
 
 def lijn_volgen():
+    # name_ = sys.path[0]
+    # print(name_)
     _, frame = video.read()
     hsvimg = hsvkleur(frame)
     mask = paarsalleen(hsvimg)
@@ -186,12 +189,12 @@ def lijn_volgen():
             x1, y1, x2, y2 = line[0]
             cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
     
-    # cv2.imshow("hough", frame)
-    # cv2.imshow("hsv", hsvimg)
-    # cv2.imshow("mask", mask)
-    # cv2.imshow("crop", crop)
-    # cv2.imshow("canny", canny)
-    # cv2.imshow("lane lines", lane_lines_image)
+    cv2.imshow("hough", frame)
+    cv2.imshow("hsv", hsvimg)
+    cv2.imshow("mask", mask)
+    cv2.imshow("crop", crop)
+    cv2.imshow("canny", canny)
+    cv2.imshow("lane lines", lane_lines_image)
     
     return hoek, averaged_lines, lane_lines_image
 
