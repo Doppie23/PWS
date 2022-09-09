@@ -11,13 +11,13 @@ def paarsalleen(hsvimg):
     # lower_blue = np.array([100, 5, 81]) #hsv codes maar dan gehalveerd
     # upper_blue = np.array([180, 255, 255])
     # mask = cv2.inRange(hsvimg, lower_blue, upper_blue)
-    min_blue = 0
+    min_blue = 49
     min_green = 0
-    min_red = 0
+    min_red = 35
     
-    max_blue = 255
-    max_green = 255
-    max_red = 255
+    max_blue = 191
+    max_green = 62
+    max_red = 186
     
     mask = cv2.inRange(hsvimg, (min_blue, min_green, min_red), (max_blue, max_green, max_red))
     return mask
@@ -162,7 +162,10 @@ def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_vera
 
 camera = 0
 
-video = cv2.VideoCapture(camera)
+video = cv2.VideoCapture(camera, cv2.CAP_DSHOW)
+
+video.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+video.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 def lijn_volgen():
     _, frame = video.read()
     hsvimg = hsvkleur(frame)
@@ -190,7 +193,7 @@ def lijn_volgen():
     # cv2.imshow("mask", mask)
     # cv2.imshow("crop", crop)
     # cv2.imshow("canny", canny)
-    # cv2.imshow("lane lines", lane_lines_image)
+    cv2.imshow("lane lines", lane_lines_image)
     
     return hoek, averaged_lines, lane_lines_image
 
