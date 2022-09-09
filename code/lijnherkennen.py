@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import math
-import sys
+from testcameraopencv import script
 
 def hsvkleur(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -166,8 +166,7 @@ camera = 1
 video = cv2.VideoCapture(camera)
 
 def lijn_volgen():
-    # name_ = sys.path[0]
-    # print(name_)
+    naam = script()
     _, frame = video.read()
     hsvimg = hsvkleur(frame)
     mask = paarsalleen(hsvimg)
@@ -189,12 +188,13 @@ def lijn_volgen():
             x1, y1, x2, y2 = line[0]
             cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
     
-    cv2.imshow("hough", frame)
-    cv2.imshow("hsv", hsvimg)
-    cv2.imshow("mask", mask)
-    cv2.imshow("crop", crop)
-    cv2.imshow("canny", canny)
-    cv2.imshow("lane lines", lane_lines_image)
+    if naam == "testcameraopencv":
+        cv2.imshow("hough", frame)
+        cv2.imshow("hsv", hsvimg)
+        cv2.imshow("mask", mask)
+        cv2.imshow("crop", crop)
+        cv2.imshow("canny", canny)
+        cv2.imshow("lane lines", lane_lines_image)
     
     return hoek, averaged_lines, lane_lines_image
 

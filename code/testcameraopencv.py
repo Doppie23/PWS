@@ -1,3 +1,4 @@
+import os
 """
 is om te testen of alle values in lijnherkennen.py goed zijn
 """
@@ -10,3 +11,7 @@ while True:
     if key == 27:
         break
 cv2.destroyAllWindows()
+
+def script():
+    naam = os.path.basename(__name__)
+    return naam
