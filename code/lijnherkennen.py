@@ -11,13 +11,12 @@ def paarsalleen(hsvimg):
     # lower_blue = np.array([100, 5, 81]) #hsv codes maar dan gehalveerd
     # upper_blue = np.array([180, 255, 255])
     # mask = cv2.inRange(hsvimg, lower_blue, upper_blue)
-    min_blue = 49
-    min_green = 0
-    min_red = 35
-    
-    max_blue = 191
-    max_green = 62
-    max_red = 186
+    min_blue = 118
+    min_green = 14
+    min_red = 107
+    max_blue = 255
+    max_green = 49
+    max_red = 177
     
     mask = cv2.inRange(hsvimg, (min_blue, min_green, min_red), (max_blue, max_green, max_red))
     return mask
