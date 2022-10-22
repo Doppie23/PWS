@@ -162,9 +162,15 @@ def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_vera
 camera = 0
 
 video = cv2.VideoCapture(camera)
+fourcc = cv2.VideoWriter_fourcc('X','V','I','D')
+videoWriter = cv2.VideoWriter('C:/Users/Daniël/Desktop/opencvtest/video.avi', fourcc, 30.0, (640,480))
 
 def lijn_volgen():
-    _, frame = video.read()
+    ret, frame = video.read()
+    if ret:
+        videoWriter.write(frame)
+
+
     hsvimg = hsvkleur(frame)
     mask = paarsalleen(hsvimg)
     canny = cannyedge(mask)
