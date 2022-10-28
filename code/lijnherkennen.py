@@ -177,10 +177,10 @@ def lijn_volgen(frame):
     # alle imshow dingen:
 
     # om lijnen van hough te laten zien
-    if lijnen is not None:
-        for line in lijnen:
-            x1, y1, x2, y2 = line[0]
-            cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
+    # if lijnen is not None:
+    #     for line in lijnen:
+    #         x1, y1, x2, y2 = line[0]
+    #         cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
     
     # cv2.imshow("hough", frame)
     # cv2.imshow("hsv", hsvimg)
