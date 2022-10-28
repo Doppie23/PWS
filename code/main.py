@@ -32,8 +32,8 @@ def main():
     IO.setmode(IO.BCM)
     IO.setup(18, IO.OUT)
     t=IO.PWM(18,100)
-    throttle = 14
-    t.start(throttle)
+    gas = 14
+    t.start(gas)
     input("licht op esc aan?")
 
     cap = cv2.VideoCapture(0)
@@ -50,12 +50,19 @@ def main():
             break
         cv2_im = frame
 
+        """
+        object herkenning
+        """
         cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
         cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
         run_inference(interpreter, cv2_im_rgb.tobytes())
         objs = get_objects(interpreter, threshold)[:top_k]
-        auto_ziet_bord(objs, labels)
+        print(f"objs: {objs}")
+        stoppen, gas = auto_ziet_bord(objs, labels, gas)
+        if stoppen:
+            t.ChangeDutyCycle(gas)
         cv2_im = append_objs_to_img(cv2_im, inference_size, objs, labels) #tekent viekant om de objecten met percentage
+
 
         """
         hoek sturen met opencv
@@ -70,22 +77,20 @@ def main():
         #zodat de servo niet te ver gaat en als de hoek wel zo groot is gaat de motor langzamer
         if stuurhoek < minstuurhoek:
             stuurhoek = minstuurhoek
-            if gas != 16:
+            if gas != 16 and stoppen != True:
                 gas = 16
                 t.ChangeDutyCycle(gas)
         elif stuurhoek > maxstuurhoek:
             stuurhoek = maxstuurhoek
-            if gas != 16:
+            if gas != 16 and stoppen != True:
                 gas = 16
                 t.ChangeDutyCycle(gas)
-        elif gas == 16 and stuurhoek < maxstuurhoek and stuurhoek > minstuurhoek:    # om gas weer terug te zetten als de hoek weer in servo range zit
+        elif gas == 16 and stuurhoek < maxstuurhoek and stuurhoek > minstuurhoek and stoppen != True:    # om gas weer terug te zetten als de hoek weer in servo range zit
             gas = 20
             t.ChangeDutyCycle(gas)
         
         ca.Stuurhoek(stuurhoek)
         print("hoek:", stuurhoek, "gas:", gas)
-
-        
 
         """
         cleanup (esc om te stoppen)
@@ -136,28 +141,22 @@ def stuurhoek_laten_zien(frame, stuurhoek, line_color=(0,0,255), line_width=10):
     richting = cv2.addWeighted(frame, 0.8, richting, 1, 1)
     return richting
 
-def auto_ziet_bord(objs, labels):
+def auto_ziet_bord(objs, labels, gas):
     for obj in objs:
         label = labels.get(obj.id, obj.id)
 
-        if label == 'paard':
-            print('paard')
-        if label == 'parkeerbord':
-            print('parkeerbord')
-        if label == 'wegdicht':
-            print('wegdicht')
-        if label == 'mens':
-            print('mens')
-        if label == 'fietspad':
-            print('fietspad')
-        if label == 'zebrapad':
-            print('zebrapad')
-        if label == 'stopbord':
-            print('stopbord')
-        if label == 'groenlicht':
-            print('groenlicht')
-        if label == 'roodlicht':
-            print('roodlicht')
+        if label in ['paard', 'wegdicht', 'mens', 'stopbord', 'roodlicht']:
+            print('stoppen')
+            stoppen = True
+            gas = 14
+        elif label == 'groenlicht':
+            stoppen = False
+            gas = 20
+            print('weer gaan')
+        else:
+           gas = 20
+
+    return stoppen, gas
 
 if __name__ == '__main__':
     main()
