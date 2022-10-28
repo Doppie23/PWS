@@ -3,6 +3,7 @@ import cv2
 import controlsauto as ca
 from time import sleep
 import RPi.GPIO as IO
+import numpy as np
 
 from pycoral.adapters.common import input_size
 from pycoral.adapters.detect import get_objects
@@ -55,14 +56,14 @@ def main():
         auto_ziet_bord(objs, labels)
         cv2_im = append_objs_to_img(cv2_im, inference_size, objs, labels) #tekent viekant om de objecten met percentage
 
-        cv2.imshow('frame', cv2_im)
-
         """
         hoek sturen met opencv
         """
-        stuurhoek, lane_lines_image = hoek.stabhoek(cv2_im)
+        stuurhoek, averaged_lines = hoek.stabhoek(cv2_im)
 
-        cv2.imshow("lane lines", lane_lines_image)
+        lane_lines_image = display_lines(cv2_im, averaged_lines)
+
+        cv2.imshow("frame", lane_lines_image)
         
         #zodat de servo niet te ver gaat en als de hoek wel zo groot is gaat de motor langzamer
         if stuurhoek < minstuurhoek:
@@ -109,6 +110,15 @@ def append_objs_to_img(cv2_im, inference_size, objs, labels):
         cv2_im = cv2.putText(cv2_im, label, (x0, y0+30),
                              cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
     return cv2_im
+
+def display_lines(frame, lines, line_color=(0, 255, 0), line_width=10):
+    line_image = np.zeros_like(frame)
+    if lines is not None:
+        for line in lines:
+            for x1, y1, x2, y2 in line:
+                cv2.line(line_image, (x1, y1), (x2, y2), line_color, line_width)
+    line_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
+    return line_image
 
 def auto_ziet_bord(objs, labels):
     for obj in objs:

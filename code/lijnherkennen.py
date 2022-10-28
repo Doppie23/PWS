@@ -189,7 +189,7 @@ def lijn_volgen(frame):
     # cv2.imshow("canny", canny)
     # cv2.imshow("lane lines", lane_lines_image)
     
-    return hoek, averaged_lines, lane_lines_image
+    return hoek, averaged_lines
 
 
     #esc om te stoppen
@@ -204,8 +204,8 @@ class lijn_volger:
         self.curr_hoek = 0
 
     def stabhoek(self, frame):
-        hoek, averaged_lines, lane_lines_image = lijn_volgen(frame)
+        hoek, averaged_lines = lijn_volgen(frame)
         self.curr_hoek = stabilize_stuurhoek(self.curr_hoek, hoek, num_lijnen=averaged_lines)
         # print(self.curr_hoek)
         
-        return self.curr_hoek, lane_lines_image
+        return self.curr_hoek, averaged_lines
