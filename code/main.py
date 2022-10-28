@@ -34,10 +34,10 @@ def main():
     t.start(throttle)
     input("licht op esc aan?")
 
-    cap = cv2.VideoCapture()
+    cap = cv2.VideoCapture(0)
 
     ca.Stuurhoek(0)
-    hoek = lijn_volger(0) #0 is de begin hoek van de servo
+    hoek = lijn_volger() #0 is de begin hoek van de servo
     input("klaar om te gaan druk op enter")
     gas = 20
     t.ChangeDutyCycle(gas)
