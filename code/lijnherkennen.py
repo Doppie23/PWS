@@ -94,15 +94,6 @@ def make_points(frame, line):
     x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
     return [[x1, y1, x2, y2]]
 
-def display_lines(frame, lines, line_color=(0, 255, 0), line_width=10):
-    line_image = np.zeros_like(frame)
-    if lines is not None:
-        for line in lines:
-            for x1, y1, x2, y2 in line:
-                cv2.line(line_image, (x1, y1), (x2, y2), line_color, line_width)
-    line_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
-    return line_image
-
 def stuurhoek(frame, lane_lines):
     if len(lane_lines) == 0: # geen lijnen
         return 0
@@ -122,20 +113,6 @@ def stuurhoek(frame, lane_lines):
     stuur_hoek_rad = math.atan(x_offset / y_offset)  
     stuur_hoek = int(stuur_hoek_rad * 180.0 / math.pi)
     return stuur_hoek
-
-def stuurhoek_laten_zien(frame, stuurhoek, line_color=(0,0,255), line_width=10):
-    richting = np.zeros_like(frame)
-    height, width, _ = frame.shape
-    stuur_hoek_rad = (stuurhoek+90)/180*math.pi
-
-    x1 = int(width / 2)
-    y1 = height
-    x2 = int(x1 - height / 2 / math.tan(stuur_hoek_rad))
-    y2 = int(height / 2)
-
-    cv2.line(frame, (x1, y1), (x2, y2), line_color, line_width)
-    richting = cv2.addWeighted(frame, 0.8, richting, 1, 1)
-    return richting
 
 def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_verandering_twee_lijnen=10, max_hoek_verandering_een_lijn=7):
     curr_stuurhoek += 90
@@ -168,10 +145,8 @@ def lijn_volgen(frame):
     crop = cropimg(canny, frame)
     lijnen = lijnendetect(crop)
     averaged_lines = average(frame, lijnen)
-    lane_lines_image = display_lines(frame, averaged_lines)
     hoek = stuurhoek(frame, averaged_lines)
     # print(hoek)
-    pijlhoek = stuurhoek_laten_zien(lane_lines_image, hoek)
     
 
     # alle imshow dingen:
