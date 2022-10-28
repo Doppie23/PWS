@@ -142,6 +142,8 @@ def stuurhoek_laten_zien(frame, stuurhoek, line_color=(0,0,255), line_width=10):
     return richting
 
 def auto_ziet_bord(objs, labels, gas):
+    gas = gas
+    stoppen = False
     for obj in objs:
         label = labels.get(obj.id, obj.id)
 
