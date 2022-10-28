@@ -34,7 +34,7 @@ def main():
     t.start(throttle)
     input("licht op esc aan?")
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture()
 
     ca.Stuurhoek(0)
     hoek = lijn_volger(0) #0 is de begin hoek van de servo
