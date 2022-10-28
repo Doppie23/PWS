@@ -3,7 +3,7 @@ import cv2
 capture = cv2.VideoCapture(0)
  
 fourcc = cv2.VideoWriter_fourcc('X','V','I','D')
-videoWriter = cv2.VideoWriter('C:/Users/N/Desktop/video.avi', fourcc, 30.0, (640,480))
+videoWriter = cv2.VideoWriter('/home/dop/Desktop/video-pws/video.avi', fourcc, 30.0, (640,480))
  
 while (True):
  
