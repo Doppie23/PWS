@@ -4,6 +4,7 @@ import controlsauto as ca
 from time import sleep
 import RPi.GPIO as IO
 import numpy as np
+import math
 
 from pycoral.adapters.common import input_size
 from pycoral.adapters.detect import get_objects
