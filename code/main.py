@@ -62,6 +62,7 @@ def main():
         stuurhoek, averaged_lines = hoek.stabhoek(cv2_im)
 
         lane_lines_image = display_lines(cv2_im, averaged_lines)
+        stuurhoek_laten_zien(lane_lines_image, stuurhoek)
 
         cv2.imshow("frame", lane_lines_image)
         
@@ -119,6 +120,20 @@ def display_lines(frame, lines, line_color=(0, 255, 0), line_width=10):
                 cv2.line(line_image, (x1, y1), (x2, y2), line_color, line_width)
     line_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
     return line_image
+
+def stuurhoek_laten_zien(frame, stuurhoek, line_color=(0,0,255), line_width=10):
+    richting = np.zeros_like(frame)
+    height, width, _ = frame.shape
+    stuur_hoek_rad = (stuurhoek+90)/180*math.pi
+
+    x1 = int(width / 2)
+    y1 = height
+    x2 = int(x1 - height / 2 / math.tan(stuur_hoek_rad))
+    y2 = int(height / 2)
+
+    cv2.line(frame, (x1, y1), (x2, y2), line_color, line_width)
+    richting = cv2.addWeighted(frame, 0.8, richting, 1, 1)
+    return richting
 
 def auto_ziet_bord(objs, labels):
     for obj in objs:
