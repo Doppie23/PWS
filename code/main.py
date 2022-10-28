@@ -142,21 +142,24 @@ def stuurhoek_laten_zien(frame, stuurhoek, line_color=(0,0,255), line_width=10):
     return richting
 
 def auto_ziet_bord(objs, labels, gas):
-    gas = gas
-    stoppen = False
-    for obj in objs:
-        label = labels.get(obj.id, obj.id)
+    if len(objs) >= 1:
+        for obj in objs:
+            label = labels.get(obj.id, obj.id)
 
-        if label in ['paard', 'wegdicht', 'mens', 'stopbord', 'roodlicht']:
-            print('stoppen')
-            stoppen = True
-            gas = 14
-        elif label == 'groenlicht':
-            stoppen = False
-            gas = 20
-            print('weer gaan')
-        else:
-           gas = 20
+            if label in ['paard', 'wegdicht', 'mens', 'stopbord', 'roodlicht']:
+                print('stoppen')
+                stoppen = True
+                gas = 14
+            elif label == 'groenlicht':
+                stoppen = False
+                gas = 20
+                print('weer gaan')
+            else:
+                gas = 20
+                stoppen = False
+    else:
+        gas = 20
+        stoppen = False
 
     return stoppen, gas
 
