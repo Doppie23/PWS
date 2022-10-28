@@ -38,8 +38,8 @@ from pycoral.utils.edgetpu import run_inference
 
 def main():
     default_model_dir = '../all_models'
-    default_model = 'efficientdet-lite-borden_edgetpu.tflite'
-    default_labels = 'borden-labels.txt'
+    default_model = '/home/dop/PWS/models/object_detection/data/model/v04/efficientdet-lite-bordenv02_edgetpu.tflite'
+    default_labels = '/home/dop/PWS/models/object_detection/data/model/v04/borden-labels.txt'
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', help='.tflite model path',
                         default=os.path.join(default_model_dir,default_model))
