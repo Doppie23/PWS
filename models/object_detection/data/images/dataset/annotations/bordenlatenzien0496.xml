@@ -1,0 +1,26 @@
+<annotation>
+	<folder>train</folder>
+	<filename>bordenlatenzien0496.jpg</filename>
+	<path>C:\Onedrive school\OneDrive - Christelijk College Nassau-Veluwe\school\PWS\code\models\object_detection\data\images\train\bordenlatenzien0496.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>480</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>roodlicht</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>446</xmin>
+			<ymin>145</ymin>
+			<xmax>498</xmax>
+			<ymax>263</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -13,8 +13,8 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
 
 def main():
-    model = '/home/dop/PWS/models/object_detection/data/model/v03-(werkt op coral)/efficientdet-lite-borden_edgetpu.tflite'
-    labels = '/home/dop/PWS/models/object_detection/data/model/v03-(werkt op coral)/borden-labels.txt'
+    model = '/home/dop/PWS/models/object_detection/data/model/v04/efficientdet-lite-bordenv02_edgetpu.tflite'
+    labels = '/home/dop/PWS/models/object_detection/data/model/v04/borden-labels.txt'
     threshold = 0.4
     top_k = 3
 

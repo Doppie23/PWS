@@ -2,7 +2,6 @@ from gpiozero import AngularServo
 from gpiozero.pins.pigpio import PiGPIOFactory
 from time import sleep
 import RPi.GPIO as IO
-import cv2
 
 factory = PiGPIOFactory()
 

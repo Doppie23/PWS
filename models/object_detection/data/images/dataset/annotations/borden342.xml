@@ -1,0 +1,38 @@
+<annotation>
+	<folder>images</folder>
+	<filename>borden342.jpg</filename>
+	<path>C:\Onedrive school\OneDrive - Christelijk College Nassau-Veluwe\school\PWS\code\models\object_detection\data\videos-borden\images\borden342.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>480</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>wegdicht</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>259</xmin>
+			<ymin>168</ymin>
+			<xmax>296</xmax>
+			<ymax>218</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>zebrapad</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>490</xmin>
+			<ymin>209</ymin>
+			<xmax>536</xmax>
+			<ymax>265</ymax>
+		</bndbox>
+	</object>
+</annotation>

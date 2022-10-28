@@ -1,0 +1,9 @@
+paard
+parkeerbord
+wegdicht
+mens
+fietspad
+zebrapad
+stopbord
+groenlicht
+roodlicht
