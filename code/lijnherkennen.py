@@ -159,12 +159,9 @@ def stabilize_stuurhoek(curr_stuurhoek, new_stuurhoek, num_lijnen, max_hoek_vera
 
 
 
-camera = 0
 
-video = cv2.VideoCapture(camera)
 
-def lijn_volgen():
-    _, frame = video.read()
+def lijn_volgen(frame):
     hsvimg = hsvkleur(frame)
     mask = paarsalleen(hsvimg)
     canny = cannyedge(mask)
@@ -203,12 +200,12 @@ def lijn_volgen():
 # cv2.destroyAllWindows()
 
 class lijn_volger:
-    def __init__(self, beginhoek = 0):
-        self.curr_hoek = beginhoek
+    def __init__(self):
+        self.curr_hoek = 0
 
-    def stabhoek(self):
-        hoek, averaged_lines, lane_lines_image = lijn_volgen()
+    def stabhoek(self, frame):
+        hoek, averaged_lines, lane_lines_image = lijn_volgen(frame)
         self.curr_hoek = stabilize_stuurhoek(self.curr_hoek, hoek, num_lijnen=averaged_lines)
         # print(self.curr_hoek)
-        cv2.imshow("lane lines", lane_lines_image)
-        return self.curr_hoek
+        
+        return self.curr_hoek, lane_lines_image

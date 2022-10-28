@@ -20,4 +20,3 @@ def cleanup():
     IO.setup(18, IO.OUT)
     IO.setup(17, IO.OUT)
     IO.cleanup()
-    cv2.destroyAllWindows()
