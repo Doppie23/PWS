@@ -46,6 +46,7 @@ def main():
         ret, frame = cap.read()
         if not ret:
             break
+        cv2_im = frame
 
         cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
         cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
@@ -59,7 +60,7 @@ def main():
         """
         hoek sturen met opencv
         """
-        stuurhoek, lane_lines_image = hoek.stabhoek(frame)
+        stuurhoek, lane_lines_image = hoek.stabhoek(cv2_im)
 
         cv2.imshow("lane lines", lane_lines_image)
         
