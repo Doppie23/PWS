@@ -59,8 +59,7 @@ def main():
         objs = get_objects(interpreter, threshold)[:top_k]
         print(f"objs: {objs}")
         stoppen, gas = auto_ziet_bord(objs, labels, gas)
-        if stoppen:
-            t.ChangeDutyCycle(gas)
+        t.ChangeDutyCycle(gas)
         cv2_im = append_objs_to_img(cv2_im, inference_size, objs, labels) #tekent viekant om de objecten met percentage
 
 
