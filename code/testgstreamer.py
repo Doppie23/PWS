@@ -33,10 +33,6 @@ def generate_svg(src_size, inference_box, objs, labels, text_lines):
         x, y, w, h = x * scale_x, y * scale_y, w * scale_x, h * scale_y
         percent = int(100 * obj.score)
         label = '{}% {}'.format(percent, labels.get(obj.id, obj.id))
-        if labels.get(obj.id, obj.id)=='stopbord':
-            gas = 14
-        else:
-            gas = 20
         svg.add_text(x, y - 5, label, 20)
         svg.add_rect(x, y, w, h, 'red', 2)
     return svg.finish(), gas
@@ -94,7 +90,11 @@ def main():
           'FPS: {} fps'.format(round(next(fps_counter))),
       ]
       print(' '.join(text_lines))
-      _, gas = generate_svg(src_size, inference_box, objs, labels, text_lines)
+      for obj in objs:
+        if labels.get(obj.id, obj.id)=='stopbord':
+            gas = 14
+        else:
+            gas = 20
       t.ChangeDutyCycle(gas)
       print(f"gas is nu: {gas}")
       return generate_svg(src_size, inference_box, objs, labels, text_lines)
