@@ -1,111 +1,112 @@
-import argparse
-import gstreamer
-import os
-import time
+from lijnherkennen import lijn_volger
+import cv2
 import controlsauto as ca
+from time import sleep
 import RPi.GPIO as IO
+import numpy as np
+import math
 
-from common import avg_fps_counter, SVG
 from pycoral.adapters.common import input_size
 from pycoral.adapters.detect import get_objects
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
 
-def generate_svg(src_size, inference_box, objs, labels, text_lines):
-    svg = SVG(src_size)
-    src_w, src_h = src_size
-    box_x, box_y, box_w, box_h = inference_box
-    scale_x, scale_y = src_w / box_w, src_h / box_h
-
-    for y, line in enumerate(text_lines, start=1):
-        svg.add_text(10, y * 20, line, 20)
-    for obj in objs:
-        bbox = obj.bbox
-        if not bbox.valid:
-            continue
-        # Absolute coordinates, input tensor space.
-        x, y = bbox.xmin, bbox.ymin
-        w, h = bbox.width, bbox.height
-        # Subtract boxing offset.
-        x, y = x - box_x, y - box_y
-        # Scale to source coordinate space.
-        x, y, w, h = x * scale_x, y * scale_y, w * scale_x, h * scale_y
-        percent = int(100 * obj.score)
-        label = '{}% {}'.format(percent, labels.get(obj.id, obj.id))
-        svg.add_text(x, y - 5, label, 20)
-        svg.add_rect(x, y, w, h, 'red', 2)
-    return svg.finish()
-
 def main():
-    default_model_dir = '../all_models'
-    default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
-    default_labels = 'coco_labels.txt'
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--model', help='.tflite model path',
-                        default="/home/dop/PWS/models/object_detection/data/model/v04/efficientdet-lite-bordenv02_edgetpu.tflite")
-    parser.add_argument('--labels', help='label file path',
-                        default='/home/dop/PWS/models/object_detection/data/model/v04/borden-labels.txt')
-    parser.add_argument('--top_k', type=int, default=3,
-                        help='number of categories with highest score to display')
-    parser.add_argument('--threshold', type=float, default=0.1,
-                        help='classifier score threshold')
-    parser.add_argument('--videosrc', help='Which video source to use. ',
-                        default='/dev/video0')
-    parser.add_argument('--videofmt', help='Input video format.',
-                        default='raw',
-                        choices=['raw', 'h264', 'jpeg'])
-    args = parser.parse_args()
+    model = '/home/dop/PWS/models/object_detection/data/model/v04/efficientdet-lite-bordenv02_edgetpu.tflite'
+    labels = '/home/dop/PWS/models/object_detection/data/model/v04/borden-labels.txt'
+    threshold = 0.8
+    top_k = 3
 
-    print('Loading {} with {} labels.'.format(args.model, args.labels))
-    interpreter = make_interpreter(args.model)
+    print(f'Loading {model} with {labels} labels.')
+    interpreter = make_interpreter(model)
     interpreter.allocate_tensors()
-    labels = read_label_file(args.labels)
+    labels = read_label_file(labels)
     inference_size = input_size(interpreter)
 
+
+    # initialiseren van auto
     print("auto aan het initialiseren")
     IO.setmode(IO.BCM)
     IO.setup(18, IO.OUT)
     t=IO.PWM(18,100)
     gas = 14
     t.start(gas)
-    ca.Stuurhoek(0)
     input("licht op esc aan?")
 
+    cap = cv2.VideoCapture(0)
+
+    ca.Stuurhoek(0)
+    hoek = lijn_volger() #0 is de begin hoek van de servo
+    input("klaar om te gaan druk op enter")
     gas = 20
     t.ChangeDutyCycle(gas)
 
-    # Average fps over last 30 frames.
-    fps_counter = avg_fps_counter(30)
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        cv2_im = frame
 
-    def user_callback(input_tensor, src_size, inference_box):
-      gas=20
-      nonlocal fps_counter
-      start_time = time.monotonic()
-      run_inference(interpreter, input_tensor)
-      # For larger input image sizes, use the edgetpu.classification.engine for better performance
-      objs = get_objects(interpreter, args.threshold)[:args.top_k]
-      end_time = time.monotonic()
-      text_lines = [
-          'Inference: {:.2f} ms'.format((end_time - start_time) * 1000),
-          'FPS: {} fps'.format(round(next(fps_counter))),
-      ]
-      print(' '.join(text_lines))
-      for obj in objs:
-        label = labels.get(obj.id, obj.id)
-        if label == 'stopbord':
-            gas = 14
-        else:
-            gas = 20
-      t.ChangeDutyCycle(gas)
-      print(f"gas is nu: {gas}")
-      return generate_svg(src_size, inference_box, objs, labels, text_lines)
+        """
+        object herkenning
+        """
+        cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
+        cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
+        run_inference(interpreter, cv2_im_rgb.tobytes())
+        objs = get_objects(interpreter, threshold)[:top_k]
+        print(f"objs: {objs}")
+        stoppen, gas = auto_ziet_bord(objs, labels, gas)
+        t.ChangeDutyCycle(gas)
+        cv2_im = append_objs_to_img(cv2_im, inference_size, objs, labels) #tekent viekant om de objecten met percentage
 
-    result = gstreamer.run_pipeline(user_callback,
-                                    src_size=(640, 480),
-                                    appsink_size=inference_size,
-                                    videosrc=args.videosrc,
-                                    videofmt=args.videofmt)
+        """
+        cleanup (esc om te stoppen)
+        """
+        key = cv2.waitKey(1)
+        if key == 27:
+            break
+    ca.cleanup()
+    cap.release()
+    cv2.destroyAllWindows()
+
+def append_objs_to_img(cv2_im, inference_size, objs, labels):
+    height, width, channels = cv2_im.shape
+    scale_x, scale_y = width / inference_size[0], height / inference_size[1]
+    for obj in objs:
+        bbox = obj.bbox.scale(scale_x, scale_y)
+        x0, y0 = int(bbox.xmin), int(bbox.ymin)
+        x1, y1 = int(bbox.xmax), int(bbox.ymax)
+
+        percent = int(100 * obj.score)
+        label = '{}% {}'.format(percent, labels.get(obj.id, obj.id))
+
+        cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
+        cv2_im = cv2.putText(cv2_im, label, (x0, y0+30),
+                             cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
+    return cv2_im
+
+def auto_ziet_bord(objs, labels, gas):
+    if len(objs) >= 1:
+        for obj in objs:
+            label = labels.get(obj.id, obj.id)
+
+            if label in ['paard', 'wegdicht', 'mens', 'stopbord', 'roodlicht']:
+                print('stoppen')
+                stoppen = True
+                gas = 14
+            elif label == 'groenlicht':
+                stoppen = False
+                gas = 20
+                print('weer gaan')
+            else:
+                gas = 20
+                stoppen = False
+    else:
+        gas = 20
+        stoppen = False
+
+    return stoppen, gas
 
 if __name__ == '__main__':
     main()
