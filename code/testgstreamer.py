@@ -35,7 +35,7 @@ def generate_svg(src_size, inference_box, objs, labels, text_lines):
         label = '{}% {}'.format(percent, labels.get(obj.id, obj.id))
         svg.add_text(x, y - 5, label, 20)
         svg.add_rect(x, y, w, h, 'red', 2)
-    return svg.finish(), gas
+    return svg.finish()
 
 def main():
     default_model_dir = '../all_models'
