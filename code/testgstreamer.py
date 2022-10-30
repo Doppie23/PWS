@@ -92,10 +92,7 @@ def main():
       ]
       print(' '.join(text_lines))
       for obj in objs:
-        if labels.get(obj.id, obj.id)=='stopbord':
-            gas = 14
-        else:
-            gas = 20
+        print(labels.get(obj.id, obj.id))
       t.ChangeDutyCycle(gas)
       print(f"gas is nu: {gas}")
       return generate_svg(src_size, inference_box, objs, labels, text_lines)
