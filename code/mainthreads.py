@@ -90,7 +90,8 @@ input("klaar om te gaan druk op enter")
 gas = 20
 t.ChangeDutyCycle(gas)
 
-def lijnvolgen(t):
+def lijnvolgen():
+    t=IO.PWM(18,100)
     hoek = lijn_volger()
     minstuurhoek = -35
     maxstuurhoek = 29
@@ -129,7 +130,8 @@ def lijnvolgen(t):
         if key == 27:
             break
 
-def bordenherkennen(t):
+def bordenherkennen():
+    t=IO.PWM(18,100)
     model = '/home/dop/PWS/models/object_detection/data/model/v04/efficientdet-lite-bordenv02_edgetpu.tflite'
     labels = '/home/dop/PWS/models/object_detection/data/model/v04/borden-labels.txt'
     threshold = 0.8
@@ -167,8 +169,8 @@ cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
-    t1 = threading.Thread(target=lijnvolgen, args=t)
-    t2 = threading.Thread(target=bordenherkennen, args=t)
+    t1 = threading.Thread(target=lijnvolgen)
+    t2 = threading.Thread(target=bordenherkennen)
 
     t1.start()
     t2.start()
