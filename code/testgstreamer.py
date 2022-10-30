@@ -60,6 +60,7 @@ def main():
         t.ChangeDutyCycle(gas)
         cv2_im = append_objs_to_img(cv2_im, inference_size, objs, labels) #tekent viekant om de objecten met percentage
 
+        cv2.imshow("frame", cv2_im)
         """
         cleanup (esc om te stoppen)
         """
