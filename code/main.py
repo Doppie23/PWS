@@ -32,6 +32,8 @@ def main():
     print("auto aan het initialiseren")
     IO.setmode(IO.BCM)
     IO.setup(18, IO.OUT)
+    IO.setup(22, IO.OUT)
+    IO.setup(23, IO.OUT)
     t=IO.PWM(18,100)
     gas = 14
     t.start(gas)
@@ -81,14 +83,21 @@ def main():
             if gas != 16 and stoppen != True:
                 gas = 16
                 t.ChangeDutyCycle(gas)
+
+                mythread = LedThread('22')
+                mythread.start()
         elif stuurhoek > maxstuurhoek:
             stuurhoek = maxstuurhoek
             if gas != 16 and stoppen != True:
                 gas = 16
                 t.ChangeDutyCycle(gas)
+
+                mythread = LedThread('23')
+                mythread.start()
         elif gas == 16 and stuurhoek < maxstuurhoek and stuurhoek > minstuurhoek and stoppen != True:    # om gas weer terug te zetten als de hoek weer in servo range zit
             gas = 20
             t.ChangeDutyCycle(gas)
+            mythread.stop()
         
         ca.Stuurhoek(stuurhoek)
         print("hoek:", stuurhoek, "gas:", gas)
@@ -164,6 +173,23 @@ def auto_ziet_bord(objs, labels, gas):
         stoppen = False
 
     return stoppen, gas
+
+class LedThread(threading.Thread): #dit is de class die het lampje laat knipperen
+
+    def __init__(self, kant):
+        super(LedThread, self).__init__()
+        self._keepgoing = True
+        self.kant = int(kant)
+
+    def run(self):
+        while (self._keepgoing):
+            IO.output(self.kant, IO.HIGH)
+            sleep(0.5)
+            IO.output(self.kant, IO.LOW)
+            sleep(0.5)
+
+    def stop(self):
+        self._keepgoing = False
 
 class FreshestFrame(threading.Thread):
 	def __init__(self, capture, name='FreshestFrame'):
