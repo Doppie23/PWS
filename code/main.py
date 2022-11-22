@@ -48,6 +48,9 @@ def main():
     gas = 20
     t.ChangeDutyCycle(gas)
 
+    cnt = 0
+    knipperen = False
+
     while True:
         cnt,img = fresh.read(seqnumber=cnt+1)
         if not cnt:
@@ -83,23 +86,27 @@ def main():
             if gas != 16 and stoppen != True:
                 gas = 16
                 t.ChangeDutyCycle(gas)
-
-                print('links knipperen')
-                mythread = LedThread('22')
-                mythread.start()
         elif stuurhoek > maxstuurhoek:
             stuurhoek = maxstuurhoek
             if gas != 16 and stoppen != True:
                 gas = 16
                 t.ChangeDutyCycle(gas)
-
-                print('rechts knipperen')
-                mythread = LedThread('23')
-                mythread.start()
         elif gas == 16 and stuurhoek < maxstuurhoek and stuurhoek > minstuurhoek and stoppen != True:    # om gas weer terug te zetten als de hoek weer in servo range zit
             gas = 20
             t.ChangeDutyCycle(gas)
+
+        if hoek<-20 and knipperen == False:
+            mythread = LedThread('22')
+            mythread.start()
+            knipperen = True
+        elif hoek>17 and knipperen == False:
+            mythread = LedThread('23')
+            mythread.start()
+            knipperen = True
+        elif hoek>-20 and hoek<17 and knipperen == True:
             mythread.stop()
+            print('stop')
+            knipperen = False
         
         ca.Stuurhoek(stuurhoek)
         print("hoek:", stuurhoek, "gas:", gas)
