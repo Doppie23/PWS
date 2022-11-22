@@ -19,6 +19,7 @@ def main():
     threshold = 0.8
     top_k = 3
 
+    print("auto aan het initialiseren")
     print(f'Loading {model} with {labels} labels.')
     interpreter = make_interpreter(model)
     interpreter.allocate_tensors()
@@ -28,8 +29,6 @@ def main():
     minstuurhoek = -35
     maxstuurhoek = 29
 
-    # initialiseren van auto
-    print("auto aan het initialiseren")
     IO.setmode(IO.BCM)
     IO.setup(18, IO.OUT)
     IO.setup(22, IO.OUT)
@@ -37,16 +36,16 @@ def main():
     t=IO.PWM(18,100)
     gas = 14
     t.start(gas)
-    input("licht op esc aan?")
 
     cap = cv2.VideoCapture(0)
     fresh = FreshestFrame(cap)
 
     ca.Stuurhoek(0)
     hoek = lijn_volger() #0 is de begin hoek van de servo
-    input("klaar om te gaan druk op enter")
-    startmotor = True
+    print('klaar om te gaan')
+    input('druk op enter')
     gas = 20
+    t.ChangeDutyCycle(gas)
 
     cnt = 0
     knipperen = False
@@ -79,13 +78,6 @@ def main():
         stuurhoek_laten_zien(lane_lines_image, stuurhoek)
 
         cv2.imshow("frame", lane_lines_image)
-
-        """
-        motor start hier (anders ging auto al rijden voordat er beeld was)
-        """
-        if startmotor == True:            
-            t.ChangeDutyCycle(gas)
-            startmotor = False
         
         #zodat de servo niet te ver gaat en als de hoek wel zo groot is gaat de motor langzamer
         if stuurhoek < minstuurhoek:
@@ -103,15 +95,15 @@ def main():
             t.ChangeDutyCycle(gas)
 
         if stuurhoek<-20 and knipperen == False:
-            mythread = LedThread('22')
-            mythread.start()
+            knipperthread = LedThread('22')
+            knipperthread.start()
             knipperen = True
         elif stuurhoek>17 and knipperen == False:
-            mythread = LedThread('23')
-            mythread.start()
+            knipperthread = LedThread('23')
+            knipperthread.start()
             knipperen = True
         elif stuurhoek>-20 and stuurhoek<17 and knipperen == True:
-            mythread.stop()
+            knipperthread.stop()
             print('stop')
             knipperen = False
         
@@ -200,9 +192,9 @@ class LedThread(threading.Thread): #dit is de class die het lampje laat knippere
     def run(self):
         while (self._keepgoing):
             IO.output(self.kant, IO.HIGH)
-            sleep(0.5)
+            sleep(0.8)
             IO.output(self.kant, IO.LOW)
-            sleep(0.5)
+            sleep(0.8)
 
     def stop(self):
         self._keepgoing = False
