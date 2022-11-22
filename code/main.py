@@ -45,8 +45,8 @@ def main():
     ca.Stuurhoek(0)
     hoek = lijn_volger() #0 is de begin hoek van de servo
     input("klaar om te gaan druk op enter")
+    startmotor = True
     gas = 20
-    t.ChangeDutyCycle(gas)
 
     cnt = 0
     knipperen = False
@@ -79,6 +79,13 @@ def main():
         stuurhoek_laten_zien(lane_lines_image, stuurhoek)
 
         cv2.imshow("frame", lane_lines_image)
+
+        """
+        motor start hier (anders ging auto al rijden voordat er beeld was)
+        """
+        if startmotor == True:            
+            t.ChangeDutyCycle(gas)
+            startmotor = False
         
         #zodat de servo niet te ver gaat en als de hoek wel zo groot is gaat de motor langzamer
         if stuurhoek < minstuurhoek:
@@ -110,8 +117,6 @@ def main():
         
         ca.Stuurhoek(stuurhoek)
         print("hoek:", stuurhoek, "gas:", gas)
-        
-        print(cv2.getWindowProperty('frame', 0))
 
         """
         cleanup (esc om te stoppen)
