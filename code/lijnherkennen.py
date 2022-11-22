@@ -8,12 +8,12 @@ def hsvkleur(img):
     return hsv
 
 def paarsalleen(hsvimg):
-    min_blue = 118
-    min_green = 14
-    min_red = 107
-    max_blue = 255
-    max_green = 49
-    max_red = 177
+    min_blue = 104
+    min_green = 121
+    min_red = 138
+    max_blue = 135
+    max_green = 170
+    max_red = 255
     
     mask = cv2.inRange(hsvimg, (min_blue, min_green, min_red), (max_blue, max_green, max_red))
     return mask

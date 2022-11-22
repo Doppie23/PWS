@@ -110,6 +110,8 @@ def main():
         
         ca.Stuurhoek(stuurhoek)
         print("hoek:", stuurhoek, "gas:", gas)
+        
+        print(cv2.getWindowProperty('frame', 0))
 
         """
         cleanup (esc om te stoppen)
