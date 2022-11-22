@@ -95,15 +95,15 @@ def main():
             gas = 20
             t.ChangeDutyCycle(gas)
 
-        if hoek<-20 and knipperen == False:
+        if stuurhoek<-20 and knipperen == False:
             mythread = LedThread('22')
             mythread.start()
             knipperen = True
-        elif hoek>17 and knipperen == False:
+        elif stuurhoek>17 and knipperen == False:
             mythread = LedThread('23')
             mythread.start()
             knipperen = True
-        elif hoek>-20 and hoek<17 and knipperen == True:
+        elif stuurhoek>-20 and stuurhoek<17 and knipperen == True:
             mythread.stop()
             print('stop')
             knipperen = False
