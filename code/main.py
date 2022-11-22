@@ -84,6 +84,7 @@ def main():
                 gas = 16
                 t.ChangeDutyCycle(gas)
 
+                print('links knipperen')
                 mythread = LedThread('22')
                 mythread.start()
         elif stuurhoek > maxstuurhoek:
@@ -92,6 +93,7 @@ def main():
                 gas = 16
                 t.ChangeDutyCycle(gas)
 
+                print('rechts knipperen')
                 mythread = LedThread('23')
                 mythread.start()
         elif gas == 16 and stuurhoek < maxstuurhoek and stuurhoek > minstuurhoek and stoppen != True:    # om gas weer terug te zetten als de hoek weer in servo range zit
