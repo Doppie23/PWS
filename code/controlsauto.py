@@ -5,14 +5,10 @@ import RPi.GPIO as IO
 
 factory = PiGPIOFactory()
 
-#hoek is nu wel redelijk (letop min angle mag niet meer dan ong -20)
 servo = AngularServo(17, min_angle=-35, max_angle=29, min_pulse_width=0.0012, max_pulse_width=0.0018, pin_factory=factory)
 
 def Stuurhoek(hoek):
-    #code voor hoek
     servo.angle = hoek
-
-#Stuurhoek(0)
 
 def cleanup():
     IO.setmode(IO.BCM)
