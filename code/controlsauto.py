@@ -14,4 +14,6 @@ def cleanup():
     IO.setmode(IO.BCM)
     IO.setup(18, IO.OUT)
     IO.setup(17, IO.OUT)
+    IO.setup(22, IO.OUT)
+    IO.setup(23, IO.OUT)
     IO.cleanup()
