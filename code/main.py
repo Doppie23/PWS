@@ -120,7 +120,7 @@ def main():
             break
 
     fresh.release()
-    IO.cleanup()
+    ca.cleanup()
     cv2.destroyAllWindows()
 
 def append_objs_to_img(cv2_im, inference_size, objs, labels):
