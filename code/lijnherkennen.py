@@ -43,8 +43,8 @@ def lijnendetect(canny):
 def average(frame, line_segments):
     """
     dit maakt van de meerdere lijnen maar twee lijnen
-    als alle hoeken < 0 dan alleen links
-    als alle hoeken > 0 dan alleen rechts
+    als alle hellingen < 0 dan alleen links
+    als alle hellingen > 0 dan alleen rechts
     """
     lane_lines = []
     if line_segments is None:
