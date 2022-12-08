@@ -49,6 +49,7 @@ def main():
 
     cnt = 0
     knipperen = False
+    stoppen = False
 
     while True:
         cnt,img = fresh.read(seqnumber=cnt+1)
@@ -64,8 +65,9 @@ def main():
         run_inference(interpreter, cv2_im_rgb.tobytes())
         objs = get_objects(interpreter, threshold)[:top_k]
         print(f"objs: {objs}")
-        stoppen, gas = auto_ziet_bord(objs, labels, gas)
-        t.ChangeDutyCycle(gas)
+        stoppen, gas, aanpas = auto_ziet_bord(objs, labels, gas, stoppen)
+        if aanpas == True:
+            t.ChangeDutyCycle(gas)
         cv2_im = append_objs_to_img(cv2_im, inference_size, objs, labels) #tekent viekant om de objecten met percentage
 
 
@@ -118,7 +120,7 @@ def main():
             break
 
     fresh.release()
-    ca.cleanup()
+    IO.cleanup()
     cv2.destroyAllWindows()
 
 def append_objs_to_img(cv2_im, inference_size, objs, labels):
@@ -160,7 +162,14 @@ def stuurhoek_laten_zien(frame, stuurhoek, line_color=(0,0,255), line_width=10):
     richting = cv2.addWeighted(frame, 0.8, richting, 1, 1)
     return richting
 
-def auto_ziet_bord(objs, labels, gas):
+def auto_ziet_bord(objs, labels, gas, stoppen):
+    if stoppen==False and gas in [20, 16]:
+        aanpas = True
+    elif stoppen==False and gas==14:
+        aanpas = True
+    else:
+        aanpas = False
+
     if len(objs) >= 1:
         for obj in objs:
             label = labels.get(obj.id, obj.id)
@@ -180,7 +189,7 @@ def auto_ziet_bord(objs, labels, gas):
         gas = 20
         stoppen = False
 
-    return stoppen, gas
+    return stoppen, gas, aanpas
 
 class LedThread(threading.Thread): #dit is de class die het lampje laat knipperen
 

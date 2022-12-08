@@ -9,11 +9,3 @@ servo = AngularServo(17, min_angle=-35, max_angle=29, min_pulse_width=0.0012, ma
 
 def Stuurhoek(hoek):
     servo.angle = hoek
-
-def cleanup():
-    IO.setmode(IO.BCM)
-    IO.setup(18, IO.OUT)
-    IO.setup(17, IO.OUT)
-    IO.setup(22, IO.OUT)
-    IO.setup(23, IO.OUT)
-    IO.cleanup()

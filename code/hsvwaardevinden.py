@@ -3,10 +3,8 @@ import cv2
 def doNothing(x):
     pass
 
-#creating a resizable window named Track Bars
 cv2.namedWindow('Track Bars', cv2.WINDOW_NORMAL)
 
-#creating track bars for gathering threshold values of red green and blue
 cv2.createTrackbar('min_blue', 'Track Bars', 0, 255, doNothing)
 cv2.createTrackbar('min_green', 'Track Bars', 0, 255, doNothing)
 cv2.createTrackbar('min_red', 'Track Bars', 0, 255, doNothing)
