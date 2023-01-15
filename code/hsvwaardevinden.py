@@ -1,3 +1,4 @@
+import json
 import cv2
 
 def doNothing(x):
@@ -46,5 +47,17 @@ print(f'    min_red = {min_red}')
 print(f'    max_blue = {max_blue}')
 print(f'    max_green = {max_green}')
 print(f'    max_red = {max_red}')
+
+json_data = {
+    "min_blue": min_blue,
+    "min_green": min_green,
+    "min_red": min_red,
+    "max_blue": max_blue,
+    "max_green": max_green,
+    "max_red": max_red,
+}
+
+with open("hsvwaarde.json", "w") as f:
+    json.dump(json_data, f, indent=4)
 
 cv2.destroyAllWindows()

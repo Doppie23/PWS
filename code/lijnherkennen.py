@@ -1,6 +1,10 @@
 import cv2
 import numpy as np
 import math
+import json
+
+with open("hsvwaarde.json", "r") as f:
+    data = json.load(f)
 
 def hsvkleur(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -8,12 +12,12 @@ def hsvkleur(img):
     return hsv
 
 def paarsalleen(hsvimg):
-    min_blue = 104
-    min_green = 121
-    min_red = 138
-    max_blue = 135
-    max_green = 170
-    max_red = 255
+    min_blue = data["min_blue"]
+    min_green = data["min_green"]
+    min_red = data["min_red"]
+    max_blue = data["max_blue"]
+    max_green = data["max_green"]
+    max_red = data["max_red"]
     
     mask = cv2.inRange(hsvimg, (min_blue, min_green, min_red), (max_blue, max_green, max_red))
     return mask
