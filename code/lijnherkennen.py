@@ -8,7 +8,6 @@ with open("hsvwaarde.json", "r") as f:
 
 def hsvkleur(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    # cv2.imshow("hsv", hsv)
     return hsv
 
 def paarsalleen(hsvimg):
